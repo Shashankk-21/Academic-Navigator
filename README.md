@@ -1,6 +1,6 @@
 # Academic Navigator 🎓
 
-A lightweight student tracking dashboard built during the College Buildathon (5th Place Winner).
+A lightweight student tracking dashboard built during the College Buildathon 
 
 ### 🚀 Key Features
 * **Local Auth:** User registration and login simulation using browser `localStorage`.
