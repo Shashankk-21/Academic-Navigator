@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Academic Navigator</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>Academic Navigator</h1>
+                <p>Organize your learning journey</p>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <div id="login-form" class="auth-form">
+                <h2>Welcome Back</h2>
+
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="student@example.com" />
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter your password" />
+                </div>
+
+                <button class="btn btn-primary btn-full" onclick="handleLogin()">Log In</button>
+
+                <p class="auth-switch">
+                    Don't have an account?
+                    <a href="#" onclick="showRegister()">Sign Up</a>
+                </p>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <div id="register-form" class="auth-form" style="display: none;">
+                <h2>Create Account</h2>
+
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" placeholder="John Doe" />
+                </div>
+
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" placeholder="student@example.com" />
+                </div>
+
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" placeholder="Create a password" />
+                </div>
+
+                <div class="form-group">
+                    <label for="register-role">I am a</label>
+                    <select id="register-role">
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-full" onclick="handleRegister()">Create Account</button>
+
+                <p class="auth-switch">
+                    Already have an account?
+                    <a href="#" onclick="showLogin()">Log In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="nav-brand">Academic Navigator</div>
+
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link" data-section="dashboard">Dashboard</a></li>
+                <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
+                <li><a href="#" class="nav-link" data-section="subject">Subject</a></li>
+                <li><a href="#" class="nav-link" data-section="modules">Weekly Modules</a></li>
+                <li><a href="#" class="nav-link" data-section="resources">Resources</a></li>
+                <li><a href="#" class="nav-link" data-section="assignments">Assignments</a></li>
+            </ul>
+
+            <div class="nav-user">
+                <span id="user-name" class="user-name"></span>
+                <button class="btn btn-logout" onclick="handleLogout()">Logout</button>
+            </div>
+
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+
+        <!-- CONTENT -->
+        <main class="container">
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="section">
+                <div class="dashboard-header">
+                    <h1>Welcome back, <span id="dashboard-name"></span>!</h1>
+                    <p class="description">
+                        Track your learning progress and stay on top of your academic journey.
+                    </p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-blue">
+                            <span>📚</span>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-modules">0/3</h3>
+                            <p>Modules Completed</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-green">
+                            <span>✓</span>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-assignments">0/2</h3>
+                            <p>Assignments Done</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-purple">
+                            <span>📝</span>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-verifications">0/3</h3>
+                            <p>Verifications Submitted</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-orange">
+                            <span>🎯</span>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-overall">0%</h3>
+                            <p>Overall Progress</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h2>Weekly Progress</h2>
+                        <div class="progress-bars">
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Week 1 - Foundation</span>
+                                    <span id="week1-percent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div id="week1-progress" class="progress-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Week 2 - Deep Concepts</span>
+                                    <span id="week2-percent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div id="week2-progress" class="progress-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Week 3 - Applications</span>
+                                    <span id="week3-percent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div id="week3-progress" class="progress-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Overall Completion</h2>
+                        <div class="circular-progress-container">
+                            <div class="circular-progress" id="circular-progress">
+                                <span class="progress-value" id="progress-value">0%</span>
+                            </div>
+                            <p class="progress-text">
+                                Keep going! Complete modules and submit verifications to increase your progress.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Quick Actions</h2>
+                    <div class="quick-actions">
+                        <button class="action-btn" onclick="navigateTo('modules')">
+                            <span class="action-icon">📖</span>
+                            <span>Continue Learning</span>
+                        </button>
+                        <button class="action-btn" onclick="navigateTo('assignments')">
+                            <span class="action-icon">📋</span>
+                            <span>View Assignments</span>
+                        </button>
+                        <button class="action-btn" onclick="navigateTo('resources')">
+                            <span class="action-icon">📁</span>
+                            <span>Browse Resources</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOME -->
+            <section id="home" class="section active">
+    <div class="hero-wrapper">
+        <div class="hero-content">
+            <span class="pill-badge">🚀 Version 2.0 Live</span>
+            <h1>Master Your Learning Curve</h1>
+            <p class="hero-description">
+                Academic Navigator restructures your syllabus into digestible weekly modules, 
+                centralizing resources so you can stop searching and start learning.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-glow" onclick="navigateTo('modules')">Start Learning</button>
+                <button class="btn btn-outline" onclick="navigateTo('dashboard')">View Progress</button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="float-card card-1">
+                <span>📚</span>
+                <div>
+                    <strong>Organized</strong>
+                    <small>All notes in one place</small>
+                </div>
+            </div>
+            <div class="float-card card-2">
+                <span>📈</span>
+                <div>
+                    <strong>Tracked</strong>
+                    <small>Real-time stats</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="features-container">
+        <div class="section-header">
+            <h2>Why Students Love It</h2>
+            <p>Everything you need to crush your exams.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon-box">⚡</div>
+                <h3>Reduce Rush</h3>
+                <p>No more last-minute syllabus panic. We break it down week by week.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box">📂</div>
+                <h3>Centralized Notes</h3>
+                <p>Stop scrolling through WhatsApp groups. Every PDF is right here.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box">🧠</div>
+                <h3>Self-Learning</h3>
+                <p>Master the basics at your own pace so classes make more sense.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box">🎯</div>
+                <h3>Deep Focus</h3>
+                <p>Teachers can focus on advanced concepts while you handle the basics.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+            <!-- SUBJECT -->
+            <section id="subject" class="section">
+                <div class="card">
+                    <h1>Digital Electronics – Demo Subject</h1>
+                    <p class="description">
+                        "This demo subject is used to showcase how Academic Navigator structures
+                        the syllabus into weekly modules with centralized resources."
+                    </p>
+
+                    <h2>Main Units</h2>
+                    <ul class="units-list">
+                        <li><strong>Unit 1:</strong> Number Systems &amp; Logic Gates</li>
+                        <li><strong>Unit 2:</strong> Boolean Algebra &amp; K-Maps</li>
+                        <li><strong>Unit 3:</strong> Combinational Circuits</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- MODULES -->
+            <section id="modules" class="section">
+                <h1>Weekly Learning Modules</h1>
+
+                <!-- Week 1 -->
+                <div class="module-card" data-week="1">
+                    <div class="module-header">
+                        <h2>Week 1 – Foundation (Self-Learning)</h2>
+                        <div class="module-badges">
+                            <span class="badge badge-self">Self-Learning</span>
+                            <span id="week1-status" class="badge badge-status"></span>
+                        </div>
+                    </div>
+
+                    <div class="module-content">
+                        <h3>Topics Covered</h3>
+                        <ul>
+                            <li>Number systems</li>
+                            <li>Basic logic gates (AND, OR, NOT, NAND, NOR, XOR)</li>
+                        </ul>
+
+                        <h3>Resources</h3>
+                        <ul class="resources-list">
+                            <li><a href="#">PDF: Digital Basics (demo link)</a></li>
+                            <li><a href="#">Video: Intro to Logic Gates (demo link)</a></li>
+                        </ul>
+
+                        <div class="verification-area">
+                            <h3>Learning Verification</h3>
+                            <textarea
+                                id="verification-week1"
+                                rows="4"
+                                placeholder="Write one doubt or one short summary for this week's content…"
+                            ></textarea>
+                            <button class="btn btn-primary" onclick="submitVerification(1)">Submit</button>
+                            <div id="saved-verification-1" class="saved-verification"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 2 -->
+                <div class="module-card" data-week="2">
+                    <div class="module-header">
+                        <h2>Week 2 – Deep Concepts (Taught in Class)</h2>
+                        <div class="module-badges">
+                            <span class="badge badge-class">Classroom</span>
+                            <span id="week2-status" class="badge badge-status"></span>
+                        </div>
+                    </div>
+
+                    <div class="module-content">
+                        <h3>Topics Covered</h3>
+                        <ul>
+                            <li>Boolean algebra</li>
+                            <li>Karnaugh Maps (K-Maps)</li>
+                        </ul>
+
+                        <h3>Resources</h3>
+                        <ul class="resources-list">
+                            <li><a href="#">PDF: K-Map Notes (demo link)</a></li>
+                            <li><a href="#">PDF: Solved K-Map Examples (demo link)</a></li>
+                        </ul>
+
+                        <div class="verification-area">
+                            <h3>Learning Verification</h3>
+                            <textarea
+                                id="verification-week2"
+                                rows="4"
+                                placeholder="Paste or describe one solved K-Map example…"
+                            ></textarea>
+                            <button class="btn btn-primary" onclick="submitVerification(2)">Submit</button>
+                            <div id="saved-verification-2" class="saved-verification"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 3 -->
+                <div class="module-card" data-week="3">
+                    <div class="module-header">
+                        <h2>Week 3 – Applications</h2>
+                        <div class="module-badges">
+                            <span class="badge badge-application">Application</span>
+                            <span id="week3-status" class="badge badge-status"></span>
+                        </div>
+                    </div>
+
+                    <div class="module-content">
+                        <h3>Topics Covered</h3>
+                        <ul>
+                            <li>Combinational circuits</li>
+                            <li>Multiplexer / Demultiplexer / Encoder / Decoder</li>
+                        </ul>
+
+                        <h3>Resources</h3>
+                        <ul class="resources-list">
+                            <li><a href="#">PPT: Combinational Circuits (demo link)</a></li>
+                            <li><a href="#">PDF: Multiplexer Example (demo link)</a></li>
+                        </ul>
+
+                        <div class="verification-area">
+                            <h3>Learning Verification</h3>
+                            <textarea
+                                id="verification-week3"
+                                rows="4"
+                                placeholder="Describe one real-life use of a multiplexer…"
+                            ></textarea>
+                            <button class="btn btn-primary" onclick="submitVerification(3)">Submit</button>
+                            <div id="saved-verification-3" class="saved-verification"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESOURCES -->
+       <section id="resources" class="section">
+    <div class="section-header">
+        <h1>Resource Library</h1>
+        <p class="description">
+            Curated learning materials organized by week. Download slides, watch lectures, or practice problems.
+        </p>
+    </div>
+
+    <div class="resource-container">
+        
+        <div class="resource-week-group">
+            <div class="week-indicator">
+                <span class="week-number">01</span>
+                <span class="week-title">Number Systems & Logic Gates</span>
+            </div>
+            <div class="resource-grid">
+                <a href="#" class="resource-item type-video">
+                    <div class="res-icon-box">▶️</div>
+                    <div class="res-details">
+                        <h4>Lecture 1: Intro to Binary</h4>
+                        <span class="res-meta">Video • 45 Mins</span>
+                    </div>
+                    <div class="res-download-btn">▶</div>
+                </a>
+
+                <a href="#" class="resource-item type-pdf">
+                    <div class="res-icon-box">📄</div>
+                    <div class="res-details">
+                        <h4>Logic Gates Cheat Sheet</h4>
+                        <span class="res-meta">PDF • Quick Reference</span>
+                    </div>
+                    <div class="res-download-btn">↓</div>
+                </a>
+
+                <a href="#" class="resource-item type-pdf">
+                    <div class="res-icon-box">📝</div>
+                    <div class="res-details">
+                        <h4>Practice Problems: Set A</h4>
+                        <span class="res-meta">PDF • Worksheet</span>
+                    </div>
+                    <div class="res-download-btn">↓</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="resource-week-group">
+            <div class="week-indicator">
+                <span class="week-number">02</span>
+                <span class="week-title">Boolean Algebra & K-Maps</span>
+            </div>
+            <div class="resource-grid">
+                <a href="#" class="resource-item type-ppt">
+                    <div class="res-icon-box">📊</div>
+                    <div class="res-details">
+                        <h4>Class Slides: K-Maps</h4>
+                        <span class="res-meta">PPT • Presentation</span>
+                    </div>
+                    <div class="res-download-btn">↓</div>
+                </a>
+
+                <a href="#" class="resource-item type-video">
+                    <div class="res-icon-box">▶️</div>
+                    <div class="res-details">
+                        <h4>Solving 4-Variable K-Maps</h4>
+                        <span class="res-meta">Video • 20 Mins</span>
+                    </div>
+                    <div class="res-download-btn">▶</div>
+                </a>
+
+                <a href="#" class="resource-item type-pdf">
+                    <div class="res-icon-box">📖</div>
+                    <div class="res-details">
+                        <h4>Chapter 4: Boolean Rules</h4>
+                        <span class="res-meta">PDF • Textbook Scan</span>
+                    </div>
+                    <div class="res-download-btn">↓</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="resource-week-group">
+            <div class="week-indicator">
+                <span class="week-number">03</span>
+                <span class="week-title">Combinational Circuits</span>
+            </div>
+            <div class="resource-grid">
+                <a href="#" class="resource-item type-video">
+                    <div class="res-icon-box">▶️</div>
+                    <div class="res-details">
+                        <h4>How Multiplexers Work</h4>
+                        <span class="res-meta">Video • 15 Mins</span>
+                    </div>
+                    <div class="res-download-btn">▶</div>
+                </a>
+
+                <a href="#" class="resource-item type-pdf">
+                    <div class="res-icon-box">💡</div>
+                    <div class="res-details">
+                        <h4>Mini-Project Ideas</h4>
+                        <span class="res-meta">PDF • Lab Guide</span>
+                    </div>
+                    <div class="res-download-btn">↓</div>
+                </a>
+
+                <a href="#" class="resource-item type-ppt">
+                    <div class="res-icon-box">📊</div>
+                    <div class="res-details">
+                        <h4>Encoders & Decoders</h4>
+                        <span class="res-meta">PPT • Slides</span>
+                    </div>
+                    <div class="res-download-btn">↓</div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</section>
+            <!-- ASSIGNMENTS -->
+            <section id="assignments" class="section">
+                <h1>Assignment Tracker</h1>
+                <p class="description">Track your assignments and their completion status.</p>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="assignments-table">
+                            <thead>
+                                <tr>
+                                    <th>Assignment</th>
+                                    <th>Week</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assignments-body"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="status-update">
+                        <h3>Update Assignment Status</h3>
+                        <div class="update-controls">
+                            <select id="assignment-select">
+                                <option value="0">Assignment 1</option>
+                                <option value="1">Assignment 2</option>
+                            </select>
+
+                            <select id="status-select">
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+
+                            <button class="btn btn-primary" onclick="updateAssignmentStatus()">
+                                Update Status
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p>Academic Navigator – Demo MVP for Organized Learning</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
